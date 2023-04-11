@@ -83,7 +83,7 @@ void Making_Envir_Cloud::diagScanCallback(const sensor_msgs::LaserScan::ConstPtr
     /* Saving LaserScan data processing */
     static int i = 1;
     char buf[10];
-    std::string scan_file_path = "/home/kenta/pcd/making_envir_cloud/laserscan_data/";
+    std::string scan_file_path = "/home/atsuki/lab_ws/data/pcd/making_envir_cloud/laserscan_data/";
     std::string scan_file_name;
 
     sprintf(buf, "%d", i);
@@ -98,7 +98,7 @@ void Making_Envir_Cloud::diagScanCallback(const sensor_msgs::LaserScan::ConstPtr
 
 
     /* Saving raw_cloud processing */
-    std::string raw_file_path = "/home/kenta/pcd/making_envir_cloud/raw_data/";
+    std::string raw_file_path = "/home/atsuki/lab_ws/data/pcd/making_envir_cloud/raw_data/";
     std::string raw_file_name;
     raw_file_name.append(raw_file_path);
     raw_file_name.append(buf);
@@ -153,7 +153,7 @@ void Making_Envir_Cloud::diagScanCallback(const sensor_msgs::LaserScan::ConstPtr
 
 
     /* Saving filtered_cloud processing */
-    std::string filtered_file_path = "/home/kenta/pcd/making_envir_cloud/filtered_data/";
+    std::string filtered_file_path = "/home/atsuki/lab_ws/data/pcd/making_envir_cloud/filtered_data/";
     std::string filtered_file_name;
     filtered_file_name.append(filtered_file_path);
     filtered_file_name.append(buf);

@@ -151,7 +151,7 @@ bool ReflectionIntensityMappingNode::pubmapCallback(std_srvs::Empty::Request &re
     }
 
     // Save raw point cloud data.
-    pcl::io::savePCDFileASCII ("/home/kenta/pcd/making_envir_cloud/test_raw.pcd", *pcl_cloud);
+    pcl::io::savePCDFileASCII ("/home/atsuki/lab_ws/data/pcd/making_envir_cloud/test_raw.pcd", *pcl_cloud);
     ROS_INFO("Saving a raw pcd file Succeeded\n");
     ROS_INFO("Please wait because a raw pcd file is filtered now ...");
 
@@ -163,7 +163,7 @@ bool ReflectionIntensityMappingNode::pubmapCallback(std_srvs::Empty::Request &re
     sor.filter (*cloud_filtered);
 
     // Save filtered point cloud data.
-    pcl::io::savePCDFileASCII ("/home/kenta/pcd/making_envir_cloud/test_filtered.pcd", *cloud_filtered);
+    pcl::io::savePCDFileASCII ("/home/atsuki/lab_ws/data/pcd/making_envir_cloud/test_filtered.pcd", *cloud_filtered);
     ROS_INFO("Saving a filtered pcd file Succeeded");
 
     map_cloud_pub.publish(map_cloud);
