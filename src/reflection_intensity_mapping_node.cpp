@@ -244,7 +244,9 @@ void ReflectionIntensityMappingNode::makingOccupancyGridMap()
     // 'rosrun map_server map_saver -f mapfilename map:=lawnOccupancyGrid' 
     occupancyGrid_pub.publish(lawn_occupancy);
     ROS_INFO("Published an OccupancyGrid data of which topic name is occupancyGrid");
-
+    
+    sleep(100); 
+    
     return ;
 }
 
