@@ -129,6 +129,7 @@ void Making_Envir_Cloud::diagScanCallback(const sensor_msgs::LaserScan::ConstPtr
             return ;
     }
 
+// 以下のコードが芝生を定めている部分だと思う
     /* Detect low level processing and distinguish cloud processing */
     for(int i = 0; i < filtered_cloud->points.size(); i++){
         double normaliz = scan_in->intensities[i] / (48.2143 * scan_in->ranges[i] * scan_in->ranges[i] - 840.393 * scan_in->ranges[i] + 4251.14+300+40);
