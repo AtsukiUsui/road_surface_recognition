@@ -17,22 +17,25 @@ Please install `laser_geometry` pkg in your catkin_ws/src/ because this pkg uses
 
 ## How to use
 
-    1. $ roslaunch road_surface_recognition build_reflection_mapping.launch
+```
+roslaunch road_surface_recognition build_reflection_mapping.launch
+```
+```
+rosrun map_server map_server ~/lab_ws/src/road_surface_recognition/test/map.yaml
+```
+```
+rosbag play ~/lab_ws/src/road_surface_recognition/test/bagFile.bag
+```
+[ INFO] [1681377668.192825764]: Function in pointcloudCallback
+[ INFO] [1681377668.192993578]: map_update_cell
+```
+rosservice call /up_map
+```
+[ INFO] [1681378656.559484596]: map_update_cell2
+[ INFO] [1681378658.009742985]: Published an OccupancyGrid data of which topic name is occupancyGrid
+```
+rosrun map_server map_saver -f mapFileName map:=lawnOccupancyGrid
+```
 
-    2. $ rosrun map_server map_server ~/catkin_ws/src/road_surface_recognition/test/map.yaml
 
-    3. $ unzip ~/catkin_ws/src/road_surface_recognition/test/bagFile.zip  
-       $ rosbag play ~/catkin_ws/src/road_surface_recognition/test/bagFile.bag
-
-**Run following command when bagfile is finished.**
-
-    4. $ rosservice call /up_map 
-
-**If you can see following message on your terminal,**  
-**`Published an OccupancyGrid data of which topic name is occupancyGrid,`**  
-**finally, run following command.**
- 
-    5. $ rosrun map_server map_saver -f mapFileName map:=lawnOccupancyGrid
- 
-**You can get occupancy grid map named mapFileName on your terminal having done command.**
 
