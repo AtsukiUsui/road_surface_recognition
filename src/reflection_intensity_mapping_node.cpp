@@ -269,10 +269,14 @@ void ReflectionIntensityMappingNode::map_update_cell2(double gx, double gy,
   double y = gy - map_CY;
   int ix = (int)(x / map_R + map_W / 2 + 0.5);
   int iy = (int)(y / map_R + map_H / 2 + 0.5);
+  // int ix = (int)((x + map_R / 2) / map_R + map_W / 2);
+  // int iy = (int)((y + map_R / 2) / map_R + map_H / 2);
 
-  int i = map_W * iy + ix;
-
-  data2[abs(i)] = value;
+  // チェックして配列の範囲外アクセスを防止
+  if (ix >= 0 && ix < map_W && iy >= 0 && iy < map_H) {
+    int i = map_W * iy + ix;
+    data2[abs(i)] = value;
+  }
 
   return;
 }
