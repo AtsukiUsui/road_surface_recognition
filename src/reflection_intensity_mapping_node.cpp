@@ -257,7 +257,7 @@ void ReflectionIntensityMappingNode::makingOccupancyGridMap() {
   ROS_INFO(
       "Published an OccupancyGrid data of which topic name is occupancyGrid");
 
-  sleep(100);
+  sleep(10000);
 
   return;
 }
