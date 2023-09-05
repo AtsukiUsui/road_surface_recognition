@@ -129,10 +129,18 @@ void Making_Envir_Cloud::diagScanCallback(
 
   // 以下のコードが芝生を定めている部分だと思う
   /* Detect low level processing and distinguish cloud processing */
+  double coefficient_a = 72.66; // x^2の係数
+  double coefficient_b = -1190; // xの係数
+  double coefficient_c = 5801;  //係数
+
   for (int i = 0; i < filtered_cloud->points.size(); i++) {
     double normaliz = scan_in->intensities[i] /
-                      (48.2143 * scan_in->ranges[i] * scan_in->ranges[i] -
-                       840.393 * scan_in->ranges[i] + 4251.14 + 300 + 40);
+                      (coefficient_a * scan_in->ranges[i] * scan_in->ranges[i] +
+                       coefficient_b * scan_in->ranges[i] + coefficient_c);
+
+    // double normaliz = scan_in->intensities[i] /
+    //                   (48.2143 * scan_in->ranges[i] * scan_in->ranges[i] -
+    //                    840.393 * scan_in->ranges[i] + 4251.14 + 300 + 40);
     // double normaliz = scan_in->intensities[i] / (-430 * scan_in->ranges[i] +
     // 3900);
 
