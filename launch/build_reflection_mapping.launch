@@ -1,6 +1,10 @@
-<?xml version="1.0"?>
-
 <launch>
-    <node name="making_envir_cloud" pkg="road_surface_recognition" type="making_environmental_pointcloud" />
-    <node name="reflection_intensity_mapping_node" pkg="road_surface_recognition" type="reflection_intensity_mapping_node" output="screen"/>
+  <rosparam command="load" file="$(find road_surface_recognition)/param/separation_curve_param.yaml"/>
+
+  <node name="making_envir_cloud" pkg="road_surface_recognition" type="making_environmental_pointcloud">
+    <param name="coefficient_a" type="double" value="72.66"/>
+    <param name="coefficient_b" type="double" value="-1190"/>
+    <param name="coefficient_c" type="double" value="5801"/>
+  </node>
+  <node name="reflection_intensity_mapping_node" pkg="road_surface_recognition" type="reflection_intensity_mapping_node" output="screen"/>
 </launch>
