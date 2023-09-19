@@ -29,9 +29,9 @@ private:
   sensor_msgs::PointCloud2 disting_cloud2;
 
   // 分離曲線の係数
-  double coefficient_a;
-  double coefficient_b;
-  double coefficient_c;
+  double coefficient_x2;
+  double coefficient_x;
+  double coefficient_0;
 
   void diagScanCallback(const sensor_msgs::LaserScan::ConstPtr &scan_in);
 };
@@ -42,9 +42,9 @@ Making_Envir_Cloud::Making_Envir_Cloud() {
   disting_cloud_pub =
       nh.advertise<sensor_msgs::PointCloud2>("/disting_cloud2", 100, false);
 
-  ros::param::get("~coefficient_a", coefficient_a);
-  ros::param::get("~coefficient_b", coefficient_b);
-  ros::param::get("~coefficient_c", coefficient_c);
+  ros::param::get("~coefficient_x2", coefficient_x2);
+  ros::param::get("~coefficient_x", coefficient_x);
+  ros::param::get("~coefficient_0", coefficient_0);
 }
 
 void Making_Envir_Cloud::diagScanCallback(
@@ -138,14 +138,15 @@ void Making_Envir_Cloud::diagScanCallback(
 
   // 以下のコードが芝生を定めている部分だと思う
   /* Detect low level processing and distinguish cloud processing */
-  // double coefficient_a = 72.66; // x^2の係数
-  // double coefficient_b = -1190; // xの係数
-  // double coefficient_c = 5801;  //係数
+  // double coefficient_x2 = 72.66; // x^2の係数
+  // double coefficient_x = -1190; // xの係数
+  // double coefficient_0 = 5801;  //係数
 
   for (int i = 0; i < filtered_cloud->points.size(); i++) {
-    double normaliz = scan_in->intensities[i] /
-                      (coefficient_a * scan_in->ranges[i] * scan_in->ranges[i] +
-                       coefficient_b * scan_in->ranges[i] + coefficient_c);
+    double normaliz =
+        scan_in->intensities[i] /
+        (coefficient_x2 * scan_in->ranges[i] * scan_in->ranges[i] +
+         coefficient_x * scan_in->ranges[i] + coefficient_0);
 
     // double normaliz = scan_in->intensities[i] /
     //                   (48.2143 * scan_in->ranges[i] * scan_in->ranges[i] -
