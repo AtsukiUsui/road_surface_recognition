@@ -1,5 +1,5 @@
 <launch>
-  <arg name="map_file" default=""/>
+  <param name="map_file" type="string" value="/home/atsuki/lab_ws/src/experiment/2023-07-10-1/map/1_2023-07-10-11-42-50.yaml"/>
 
   <arg name="rosbag" default="false"/>
   <arg name="rosbag_rate" default="1.0"/>
@@ -18,7 +18,6 @@
 
       <node name="playbag" pkg="rosbag" type="play" 
             args="$(arg rosbag_filename) --clock -r $(arg rosbag_rate)"/>
-
   </group>
 
   <rosparam command="load" file="$(find road_surface_recognition)/param/separation_curve_param.yaml"/>
@@ -29,7 +28,7 @@
     <param name="coefficient_0" type="double" value="5801"/>
   </node>
 
-  <node name="reflection_intensity_mapping_node" pkg="road_surface_recognition" type="reflection_intensity_mapping_node" output="screen"/>
-
+  <node name="reflection_intensity_mapping_node" pkg="road_surface_recognition" type="reflection_intensity_mapping_node" output="screen">
+    <rosparam param="map_file" />
+  </node>
 </launch>
-

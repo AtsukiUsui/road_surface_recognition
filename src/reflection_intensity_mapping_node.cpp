@@ -257,6 +257,52 @@ void ReflectionIntensityMappingNode::makingOccupancyGridMap() {
   ROS_INFO(
       "Published an OccupancyGrid data of which topic name is occupancyGrid");
 
+  sleep(3);
+
+  // 以下、自動でマップを保存してくれる機能
+  ros::NodeHandle nh;
+  // map_file パラメータの値を取得
+  std::string map_file;
+  if (!nh.getParam("map_file", map_file)) {
+    ROS_ERROR("Failed to get 'map_file' parameter.");
+  } else {
+    // 拡張子が .yaml の場合、削除する
+    if (map_file.size() >= 5 &&
+        map_file.substr(map_file.size() - 5) == ".yaml") {
+      map_file = map_file.substr(0, map_file.size() - 5);
+    }
+    ROS_INFO("Map file path without .yaml extension: %s", map_file.c_str());
+  }
+
+  // ディレクトリとファイル名に分割
+  size_t lastSlash = map_file.find_last_of("/"); // 最後の/のインデックスを示す
+  if (lastSlash == std::string::npos) {
+    ROS_ERROR("Invalid 'map_file' format.");
+  }
+
+  std::string directory = map_file.substr(0, lastSlash); // ディレクトリ
+  std::string filename = map_file.substr(lastSlash + 1); // ファイル名
+
+  // ファイル名に "_lawnOccupancyGrid" を追加
+  filename = filename + "_lawnOccupancyGrid";
+
+  // ディレクトリを移動
+  if (chdir(directory.c_str()) != 0) {
+    perror("chdir");
+  }
+
+  // 外部コマンドを実行
+  std::string command = "rosrun map_server map_saver -f " + filename +
+                        "_lawnmap map:=lawnOccupancyGrid";
+  int result = system(command.c_str());
+
+  // 外部コマンドの実行結果をチェック
+  if (result == 0) {
+    ROS_INFO("map_saver executed successfully");
+  } else {
+    ROS_ERROR("map_saver execution failed");
+  }
+
   sleep(10000);
 
   return;
