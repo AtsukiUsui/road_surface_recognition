@@ -261,10 +261,11 @@ void ReflectionIntensityMappingNode::makingOccupancyGridMap() {
 
   // 以下、自動でマップを保存してくれる機能
   ros::NodeHandle nh;
-  // map_file パラメータの値を取得
+  // map_file_path パラメータの値を取得
   std::string map_file;
-  if (!nh.getParam("map_file", map_file)) {
-    ROS_ERROR("Failed to get 'map_file' parameter.");
+  if (!nh.getParam("/reflection_intensity_mapping_node/map_file_path",
+                   map_file)) {
+    ROS_ERROR("Failed to get 'map_file_path' parameter.");
   } else {
     // 拡張子が .yaml の場合、削除する
     if (map_file.size() >= 5 &&
@@ -283,8 +284,24 @@ void ReflectionIntensityMappingNode::makingOccupancyGridMap() {
   std::string directory = map_file.substr(0, lastSlash); // ディレクトリ
   std::string filename = map_file.substr(lastSlash + 1); // ファイル名
 
-  // ファイル名に "_lawnOccupancyGrid" を追加
-  filename = filename + "_lawnOccupancyGrid";
+  // パラメータの値を取得
+  double coefficient_0_double, coefficient_x_double, coefficient_x2_double;
+  if (!nh.getParam("/making_envir_cloud/coefficient_0", coefficient_0_double) ||
+      !nh.getParam("/making_envir_cloud/coefficient_x", coefficient_x_double) ||
+      !nh.getParam("/making_envir_cloud/coefficient_x2",
+                   coefficient_x2_double)) {
+    ROS_ERROR("Failed to get coefficients from ROS parameters.");
+  }
+
+  // double 型を int 型に変換
+  int coefficient_0 = static_cast<int>(coefficient_0_double);
+  int coefficient_x = static_cast<int>(coefficient_x_double);
+  int coefficient_x2 = static_cast<int>(coefficient_x2_double);
+
+  // ファイル名を構築
+  filename = filename + "__" + std::to_string(coefficient_x2) + "x^2 + " +
+             std::to_string(coefficient_x) + "x + " +
+             std::to_string(coefficient_0);
 
   // ディレクトリを移動
   if (chdir(directory.c_str()) != 0) {
@@ -293,7 +310,7 @@ void ReflectionIntensityMappingNode::makingOccupancyGridMap() {
 
   // 外部コマンドを実行
   std::string command = "rosrun map_server map_saver -f " + filename +
-                        "_lawnmap map:=lawnOccupancyGrid";
+                        "_lawnOccupancyGridmap map:=lawnOccupancyGrid";
   int result = system(command.c_str());
 
   // 外部コマンドの実行結果をチェック

@@ -1,0 +1,10 @@
+rosbag: true
+rosbag_rate: 1.0
+rosbag_filename: "/home/atsuki/lab_ws/src/experiment/2023-07-10-1/2_2023-07-10-11-49-39.bag"
+
+map_file: "/home/atsuki/lab_ws/src/experiment/2023-07-10-1/map/2_2023-07-10-11-49-39.bag.yaml"
+
+# 分離曲線の式
+coefficient_x2: 72.66
+coefficient_x: -1190
+coefficient_0: 5801
