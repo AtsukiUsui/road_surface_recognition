@@ -272,7 +272,7 @@ void ReflectionIntensityMappingNode::makingOccupancyGridMap() {
         map_file.substr(map_file.size() - 5) == ".yaml") {
       map_file = map_file.substr(0, map_file.size() - 5);
     }
-    ROS_INFO("Map file path without .yaml extension: %s", map_file.c_str());
+    // ROS_INFO("Map file path without .yaml extension: %s", map_file.c_str());
   }
 
   // ディレクトリとファイル名に分割
@@ -299,9 +299,12 @@ void ReflectionIntensityMappingNode::makingOccupancyGridMap() {
   int coefficient_x2 = static_cast<int>(coefficient_x2_double);
 
   // ファイル名を構築
-  filename = filename + "__" + std::to_string(coefficient_x2) + "x^2 + " +
-             std::to_string(coefficient_x) + "x + " +
+  filename = filename + "__" + std::to_string(coefficient_x2) + "x^2+" +
+             std::to_string(coefficient_x) + "x+" +
              std::to_string(coefficient_0);
+
+  ROS_INFO("map_file_directory: %s", directory.c_str());
+  ROS_INFO("map_file_name: %s", filename.c_str());
 
   // ディレクトリを移動
   if (chdir(directory.c_str()) != 0) {
@@ -320,7 +323,7 @@ void ReflectionIntensityMappingNode::makingOccupancyGridMap() {
     ROS_ERROR("map_saver execution failed");
   }
 
-  sleep(10000);
+  sleep(10);
 
   return;
 }
