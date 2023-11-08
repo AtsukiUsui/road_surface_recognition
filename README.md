@@ -17,6 +17,15 @@ Please install `laser_geometry` pkg in your catkin_ws/src/ because this pkg uses
 
 ## How to use
 
+### NEW
+'''
+roslaunch road_surface_recognition build_reflection_mapping.launch map_file:=/home/atsuki/lab_ws/src/experiment/2023-07-10-1/map/1_2023-07-10-11-42-50.yaml  rosbag:=true rosbag_rate:=1 rosbag_filename:=/home/atsuki/lab_ws/src/experiment/2023-07-10-1/1_2023-07-10-11-42-50.bag
+'''
+'''
+rosservice call /up_map
+'''
+
+### old
 ```
 roslaunch road_surface_recognition build_reflection_mapping.launch
 ```

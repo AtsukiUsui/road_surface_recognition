@@ -257,7 +257,73 @@ void ReflectionIntensityMappingNode::makingOccupancyGridMap() {
   ROS_INFO(
       "Published an OccupancyGrid data of which topic name is occupancyGrid");
 
-  sleep(10000);
+  sleep(3);
+
+  // 以下、自動でマップを保存してくれる機能
+  ros::NodeHandle nh;
+  // map_file_path パラメータの値を取得
+  std::string map_file;
+  if (!nh.getParam("/reflection_intensity_mapping_node/map_file_path",
+                   map_file)) {
+    ROS_ERROR("Failed to get 'map_file_path' parameter.");
+  } else {
+    // 拡張子が .yaml の場合、削除する
+    if (map_file.size() >= 5 &&
+        map_file.substr(map_file.size() - 5) == ".yaml") {
+      map_file = map_file.substr(0, map_file.size() - 5);
+    }
+    // ROS_INFO("Map file path without .yaml extension: %s", map_file.c_str());
+  }
+
+  // ディレクトリとファイル名に分割
+  size_t lastSlash = map_file.find_last_of("/"); // 最後の/のインデックスを示す
+  if (lastSlash == std::string::npos) {
+    ROS_ERROR("Invalid 'map_file' format.");
+  }
+
+  std::string directory = map_file.substr(0, lastSlash); // ディレクトリ
+  std::string filename = map_file.substr(lastSlash + 1); // ファイル名
+
+  // パラメータの値を取得
+  double coefficient_0_double, coefficient_x_double, coefficient_x2_double;
+  if (!nh.getParam("/making_envir_cloud/coefficient_0", coefficient_0_double) ||
+      !nh.getParam("/making_envir_cloud/coefficient_x", coefficient_x_double) ||
+      !nh.getParam("/making_envir_cloud/coefficient_x2",
+                   coefficient_x2_double)) {
+    ROS_ERROR("Failed to get coefficients from ROS parameters.");
+  }
+
+  // double 型を int 型に変換
+  int coefficient_0 = static_cast<int>(coefficient_0_double);
+  int coefficient_x = static_cast<int>(coefficient_x_double);
+  int coefficient_x2 = static_cast<int>(coefficient_x2_double);
+
+  // ファイル名を構築
+  filename = filename + "__" + std::to_string(coefficient_x2) + "x^2+" +
+             std::to_string(coefficient_x) + "x+" +
+             std::to_string(coefficient_0);
+
+  ROS_INFO("map_file_directory: %s", directory.c_str());
+  ROS_INFO("map_file_name: %s", filename.c_str());
+
+  // ディレクトリを移動
+  if (chdir(directory.c_str()) != 0) {
+    perror("chdir");
+  }
+
+  // 外部コマンドを実行
+  std::string command = "rosrun map_server map_saver -f " + filename +
+                        "_lawnOccupancyGridmap map:=lawnOccupancyGrid";
+  int result = system(command.c_str());
+
+  // 外部コマンドの実行結果をチェック
+  if (result == 0) {
+    ROS_INFO("map_saver executed successfully");
+  } else {
+    ROS_ERROR("map_saver execution failed");
+  }
+
+  sleep(10);
 
   return;
 }
