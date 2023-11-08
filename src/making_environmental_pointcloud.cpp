@@ -33,6 +33,8 @@ private:
   double coefficient_x;
   double coefficient_0;
 
+  double illuminance;
+
   void diagScanCallback(const sensor_msgs::LaserScan::ConstPtr &scan_in);
 };
 
@@ -45,6 +47,8 @@ Making_Envir_Cloud::Making_Envir_Cloud() {
   ros::param::get("~coefficient_x2", coefficient_x2);
   ros::param::get("~coefficient_x", coefficient_x);
   ros::param::get("~coefficient_0", coefficient_0);
+
+  ros::param::get("~illuminance", illuminance);
 }
 
 void Making_Envir_Cloud::diagScanCallback(
@@ -143,10 +147,18 @@ void Making_Envir_Cloud::diagScanCallback(
   // double coefficient_0 = 5801;  //係数
 
   for (int i = 0; i < filtered_cloud->points.size(); i++) {
-    double normaliz =
-        scan_in->intensities[i] /
-        (coefficient_x2 * scan_in->ranges[i] * scan_in->ranges[i] +
-         coefficient_x * scan_in->ranges[i] + coefficient_0);
+    double normaliz;
+    if (illuminance <= 35000) {
+      normaliz = scan_in->intensities[i] /
+                 (coefficient_x2 * scan_in->ranges[i] * scan_in->ranges[i] +
+                  coefficient_x * scan_in->ranges[i] + coefficient_0 +
+                  0.0110518136891386 * illuminance);
+    } else {
+      normaliz = scan_in->intensities[i] /
+                 (coefficient_x2 * scan_in->ranges[i] * scan_in->ranges[i] +
+                  coefficient_x * scan_in->ranges[i] + coefficient_0 -
+                  0.0007631402589297618 * illuminance);
+    }
 
     // double normaliz = scan_in->intensities[i] /
     //                   (48.2143 * scan_in->ranges[i] * scan_in->ranges[i] -

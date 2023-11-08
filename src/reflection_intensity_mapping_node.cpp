@@ -286,10 +286,12 @@ void ReflectionIntensityMappingNode::makingOccupancyGridMap() {
 
   // パラメータの値を取得
   double coefficient_0_double, coefficient_x_double, coefficient_x2_double;
+  int illuminance;
   if (!nh.getParam("/making_envir_cloud/coefficient_0", coefficient_0_double) ||
       !nh.getParam("/making_envir_cloud/coefficient_x", coefficient_x_double) ||
       !nh.getParam("/making_envir_cloud/coefficient_x2",
-                   coefficient_x2_double)) {
+                   coefficient_x2_double) ||
+      !nh.getParam("/making_envir_cloud/illuminance", illuminance)) {
     ROS_ERROR("Failed to get coefficients from ROS parameters.");
   }
 
@@ -301,7 +303,8 @@ void ReflectionIntensityMappingNode::makingOccupancyGridMap() {
   // ファイル名を構築
   filename = filename + "__" + std::to_string(coefficient_x2) + "x^2+" +
              std::to_string(coefficient_x) + "x+" +
-             std::to_string(coefficient_0);
+             std::to_string(coefficient_0) + "_" + std::to_string(illuminance) +
+             "lx";
 
   ROS_INFO("map_file_directory: %s", directory.c_str());
   ROS_INFO("map_file_name: %s", filename.c_str());
