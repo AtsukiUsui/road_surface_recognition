@@ -156,8 +156,8 @@ void Making_Envir_Cloud::diagScanCallback(
     } else {
       normaliz = scan_in->intensities[i] /
                  (coefficient_x2 * scan_in->ranges[i] * scan_in->ranges[i] +
-                  coefficient_x * scan_in->ranges[i] + coefficient_0 -
-                  0.0007631402589297618 * illuminance);
+                  coefficient_x * scan_in->ranges[i] + coefficient_0 +
+                  -0.0007631402589297618 * illuminance);
     }
 
     // double normaliz = scan_in->intensities[i] /
